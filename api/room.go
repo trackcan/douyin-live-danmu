@@ -1,7 +1,6 @@
 package api
 
 import (
-	"douyin-live-danmusrv/config"
 	"douyin-live-danmusrv/consts"
 	"douyin-live-danmusrv/room"
 	"github.com/gin-gonic/gin"
@@ -9,6 +8,7 @@ import (
 
 type EntryRoomParam struct {
 	LiveUrl string `json:"live_url" form:"live_url" binding:"required"`
+	ReportUrl string `json:"report_url" form:"report_url" binding:"required"`
 }
 
 func OnEntryRoom(c *gin.Context) {
@@ -19,8 +19,7 @@ func OnEntryRoom(c *gin.Context) {
 	}
 
 	roomMgr := c.MustGet(consts.ROOMMGR).(*room.RoomMgr)
-	cfg := c.MustGet(consts.CONFIG).(*config.Config)
-	_, err := roomMgr.Add(param.LiveUrl, cfg.ReportApi)
+	_, err := roomMgr.Add(param.LiveUrl, param.ReportUrl)
 	if err != nil {
 		Fail(c, consts.FAIL, err.Error())
 		return
